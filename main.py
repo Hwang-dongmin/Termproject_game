@@ -391,7 +391,7 @@ while 1:
                 player_att_dir -= 2
     
     
-    print(player_life)
+    
     small_font = pygame.font.SysFont(None, 36)
     remain_time = int(time.time()-start_time)
     remain_time_image = small_font.render('Time {}'.format(remain_time), True, (255,255,0))
