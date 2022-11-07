@@ -5,7 +5,7 @@ from pygame.locals import *
 from image_load import *
 
 #죽었을때 애니메이션 추가, 코드 수정 -> 적 클래스 여러개 만들기/ 렉 해결안됨 -> 렉해결( 이미지 미리 불러오기 )
-#플레이어 생명력은 3칸, 공격 받을 때마다 공격받는 이펙트와 함께 생명력 깎기
+#플레이어 생명력은 3칸, 공격 받을 때마다 달 부서지기
 
 # 2 - Initialize the game   
 pygame.init()
@@ -297,6 +297,35 @@ class PlayerAttack(pygame.sprite.Sprite):
         if self.index >= len(self.images[self.att_dir_top]):
             #we will make the index to 0 again
             player_att_group.remove(self)
+            return
+        #if self.index >= 3:#두 틱만 공격 활성화
+            
+            #player_att_on_dir = -1
+        #finally we will update the image that will be displayed
+        # self.image = self.images[self.fixed_dir][self.index] # 함수 밖의 fixed_dir값을 참조함 씨발. 클래스 내에 고정 값 못만드나??
+        self.image = pygame.transform.flip(self.images[self.att_dir_top][self.index].convert_alpha(),self.att_dir_bool,False)
+
+class MoonAttacked(pygame.sprite.Sprite):
+    def __init__(self,dir):
+        super(MoonAttacked(dir), self).__init__()
+        #adding all the images to sprite array
+        self.images = player_att_images #image flip으로 수정하기;;
+        #index value to get the image from the array
+        #initially it is 0 
+        self.index = 0
+        #now the image that we will display will be the index from the image array 
+        self.image = pygame.transform.flip(self.images[self.att_dir_top][0].convert_alpha(),self.att_dir_bool,False)
+
+        #creating a rect at position x,y (5,5) of size (150,198) which is the size of sprite 
+        self.rect = pygame.Rect(0, 0, 960, 576)
+        
+        
+
+    def update(self):
+        
+        if self.index >= len(self.images[self.att_dir_top]):
+            #we will make the index to 0 again
+            player_att_group.remove(self) # 피격 에니도 걍 att_group에 넣자 ㄱㅊ
             return
         #if self.index >= 3:#두 틱만 공격 활성화
             
