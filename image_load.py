@@ -18,6 +18,38 @@ player_att_images[1].append(pygame.image.load('resources/images/player/player_at
 player_att_images[1].append(pygame.image.load('resources/images/player/player_att_left_top_03.png'))
 player_att_images[1].append(pygame.image.load('resources/images/player/player_att_left_top_04.png'))
 
+moon_attacked = []
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked01.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked02.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked02.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked03.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked03.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked04.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked04.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked05.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked06.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked06.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked07.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked07.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked08.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked08.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked09.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked10.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked10.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked11.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked11.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked12.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked12.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked13.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked14.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked14.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked15.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked15.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked16.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked16.png'))
+moon_attacked.append(pygame.image.load('resources/images/player/moon/moon_attacked17.png'))
+
+
 
 
 

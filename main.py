@@ -22,6 +22,7 @@ dir_left = 0
 dir_right = 1
 dir_top_left = 2
 dir_top_right = 3
+player_attacked = False
 player_att_dir = dir_left
 player_att_cool = 20 # 30fps , 1 sec
 player_att_cool_tmp = 0
@@ -62,6 +63,7 @@ class enemy1(pygame.sprite.Sprite):
         global player_att_on_dir
         global screen_shake
         global player_life
+        global player_attacked
         #when the update method is called, we will increment the index
         self.index += 1
         
@@ -79,6 +81,8 @@ class enemy1(pygame.sprite.Sprite):
                 return
             
         if self.index == 30:
+            
+            player_attacked = True
             player_life -= 1
             pygame.time.delay(30)
             screen_shake = 5
@@ -138,6 +142,7 @@ class enemy2(pygame.sprite.Sprite):
         global player_att_on_dir
         global screen_shake
         global player_life
+        global player_attacked
         #when the update method is called, we will increment the index
         self.index += 1
         
@@ -154,6 +159,7 @@ class enemy2(pygame.sprite.Sprite):
                 
                 return
         if self.index == 30:
+            player_attacked = True
             player_life -= 1
             pygame.time.delay(30)
             screen_shake = 5
@@ -212,6 +218,7 @@ class enemy3(pygame.sprite.Sprite):
         global player_att_on_dir
         global screen_shake
         global player_life
+        global player_attacked
         #when the update method is called, we will increment the index
         self.index += 1
         
@@ -229,7 +236,8 @@ class enemy3(pygame.sprite.Sprite):
                 return
             
         if self.index == 23:
-        
+            
+            player_attacked = True
             player_life -= 1
             pygame.time.delay(30)
             screen_shake = 5
@@ -306,42 +314,46 @@ class PlayerAttack(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.images[self.att_dir_top][self.index].convert_alpha(),self.att_dir_bool,False)
 
 class MoonAttacked(pygame.sprite.Sprite):
-    def __init__(self,dir):
-        super(MoonAttacked(dir), self).__init__()
-        #adding all the images to sprite array
-        self.images = player_att_images #image flip으로 수정하기;;
-        #index value to get the image from the array
-        #initially it is 0 
-        self.index = 0
-        #now the image that we will display will be the index from the image array 
-        self.image = pygame.transform.flip(self.images[self.att_dir_top][0].convert_alpha(),self.att_dir_bool,False)
-
-        #creating a rect at position x,y (5,5) of size (150,198) which is the size of sprite 
+    def __init__(self):
+        super(MoonAttacked, self).__init__()
+        print(len(moon_attacked))
+        self.images = moon_attacked 
+        self.index = 0 
+        self.image = self.images[0].convert_alpha()
         self.rect = pygame.Rect(0, 0, 960, 576)
         
-        
-
     def update(self):
+        global player_attacked
         
-        if self.index >= len(self.images[self.att_dir_top]):
-            #we will make the index to 0 again
-            player_att_group.remove(self) # 피격 에니도 걍 att_group에 넣자 ㄱㅊ
-            return
-        #if self.index >= 3:#두 틱만 공격 활성화
+        if player_attacked == True:
+            self.index += 1
             
-            #player_att_on_dir = -1
-        #finally we will update the image that will be displayed
-        # self.image = self.images[self.fixed_dir][self.index] # 함수 밖의 fixed_dir값을 참조함 씨발. 클래스 내에 고정 값 못만드나??
-        self.image = pygame.transform.flip(self.images[self.att_dir_top][self.index].convert_alpha(),self.att_dir_bool,False)
+            if self.index == 7:
+                player_attacked = False
+            if self.index == 14:
+                player_attacked = False
+            if self.index == 21:
+                player_attacked = False
+            if self.index == 28:
+                player_attacked = False
+            if self.index >= 29:
+                pygame.quit()
+                exit()
+        self.image = self.images[self.index ].convert_alpha()
 
 
 
 screen = pygame.display.set_mode((960,576))
+moon_attacked_group = pygame.sprite.RenderPlain()
+moon_attack = MoonAttacked()
+moon_attacked_group.add(moon_attack)
+
 player_att_group = pygame.sprite.RenderPlain()
 enemy_att_group = pygame.sprite.RenderPlain()
 clock = pygame.time.Clock()
 # 4 - keep looping through
 while 1:
+    
     
     # 5 - clear the screen before drawing it again
     screen.fill(0)
@@ -427,7 +439,8 @@ while 1:
  
     screen.blit(remain_time_image, (10, 10))
  
-    
+    moon_attacked_group.update()
+    moon_attacked_group.draw(screen)
     player_att_group.update()
     player_att_group.draw(screen)
     enemy_att_group.update()
