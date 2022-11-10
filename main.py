@@ -6,7 +6,8 @@ from image_load import *
 
 #죽었을때 애니메이션 추가, 코드 수정 -> 적 클래스 여러개 만들기/ 렉 해결안됨 -> 렉해결( 이미지 미리 불러오기 )
 #플레이어 생명력은 3칸, 공격 받을 때마다 달 부서지기
-
+#게임 기획: 30초 이상 살아남기, 몹 생성 클래스 구현. 공격 패턴: 단일 공격 및 공격 패턴 a,b,c 만들어서?
+#몸 생성시 스스로 인스턴스 제거
 # 2 - Initialize the game   
 pygame.init()
 width, height = 960, 576
@@ -32,7 +33,36 @@ tmp_up_pressed = False # UP키가 눌렸는가?
 screen_shake = 0 #화면 흔들기
 player_life = 50
 
+class EnemyGenerator(pygame.sprite.Sprite):
+    """
+    time (int) : 생성 시각, 
+    enemy_patter_type (int) : 적 생성 패턴
+    a,b,c,d,e,f : 단일 생성 양방향 포함.
+    A,B,C.. : 다중 공격 세트 방향 고정.
+    
+    *클래스 변수 참조 방법 : EnemyGenerator.변수 (인스턴스의 경우 self.변수 사용)
+    """
+    
+    def __init__(self, time, enemy_pattern_type):
+        super(EnemyGenerator, self).__init__()
+        self.attack_start = False
+        self.time = time
+        self.enemy_pattern_type = enemy_pattern_type
 
+
+    def update(self):
+        global remain_time
+        #time 기능으로 적절한 패턴 타이밍 구현하기
+        if remain_time == self.time and self.attack_start == False:
+            self.attack_start = True
+        if self.attack_start == True:
+            if self.enemy_pattern_type == 'a':
+                pass
+            if self.enemy_pattern_type == 'b':
+                pass
+
+
+        
 
 class enemy1(pygame.sprite.Sprite):
     # att_dir = -1
@@ -434,7 +464,7 @@ while 1:
     
     
     small_font = pygame.font.SysFont(None, 36)
-    remain_time = int(time.time()-start_time)
+    remain_time = int((time.time()-start_time)*10)/10
     remain_time_image = small_font.render('Time {}'.format(remain_time), True, (255,255,0))
  
     screen.blit(remain_time_image, (10, 10))
