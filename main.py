@@ -31,35 +31,57 @@ player_att_ready = True
 player_att_on_dir = -1 # -1 : non , 0:l,1:r,2:l_t,3:r_t
 tmp_up_pressed = False # UP키가 눌렸는가?
 screen_shake = 0 #화면 흔들기
-player_life = 50
+player_life = 4
 
+game_state = 0 # 0: 시작 전, 1: 진행중, 2: 끝남
 class EnemyGenerator(pygame.sprite.Sprite):
     """
     time (int) : 생성 시각, 
     enemy_patter_type (int) : 적 생성 패턴
-    a,b,c,d,e,f : 단일 생성 양방향 포함.
-    A,B,C.. : 다중 공격 세트 방향 고정.
+    a,b,c, : 단일 생성 좌
+    A,B,C : 단일 생성 우
     
     *클래스 변수 참조 방법 : EnemyGenerator.변수 (인스턴스의 경우 self.변수 사용)
     """
     
     def __init__(self, time, enemy_pattern_type):
         super(EnemyGenerator, self).__init__()
+        self.image = enemy_gen_image.convert_alpha()
         self.attack_start = False
         self.time = time
         self.enemy_pattern_type = enemy_pattern_type
 
+        
+        self.rect = pygame.Rect(0, 0, 960, 576)
+
 
     def update(self):
         global remain_time
+        self.start_time = 0
         #time 기능으로 적절한 패턴 타이밍 구현하기
         if remain_time == self.time and self.attack_start == False:
+            self.start_time = 0
             self.attack_start = True
         if self.attack_start == True:
             if self.enemy_pattern_type == 'a':
-                pass
+                enemy = enemy1(0)
+                enemy_att_group.add(enemy)
             if self.enemy_pattern_type == 'b':
-                pass
+                enemy = enemy2(0)
+                enemy_att_group.add(enemy)
+            if self.enemy_pattern_type == 'c':
+                enemy = enemy3(0)
+                enemy_att_group.add(enemy)
+            if self.enemy_pattern_type == 'A':
+                enemy = enemy1(1)
+                enemy_att_group.add(enemy)
+            if self.enemy_pattern_type == 'B':
+                enemy = enemy2(1)
+                enemy_att_group.add(enemy)
+            if self.enemy_pattern_type == 'C':
+                enemy = enemy3(1)
+                enemy_att_group.add(enemy)
+            enemy_gen_group.remove(self)
 
 
         
@@ -113,7 +135,7 @@ class enemy1(pygame.sprite.Sprite):
         if self.index == 30:
             
             player_attacked = True
-            player_life -= 1
+
             pygame.time.delay(30)
             screen_shake = 5
 
@@ -190,7 +212,7 @@ class enemy2(pygame.sprite.Sprite):
                 return
         if self.index == 30:
             player_attacked = True
-            player_life -= 1
+
             pygame.time.delay(30)
             screen_shake = 5
                 
@@ -268,7 +290,7 @@ class enemy3(pygame.sprite.Sprite):
         if self.index == 23:
             
             player_attacked = True
-            player_life -= 1
+
             pygame.time.delay(30)
             screen_shake = 5
                 
@@ -354,34 +376,43 @@ class MoonAttacked(pygame.sprite.Sprite):
         
     def update(self):
         global player_attacked
-        
-        if player_attacked == True:
+        global game_state
+        global player_life
+        if player_attacked == True and game_state == 1:
             self.index += 1
             
             if self.index == 7:
+                player_life -= 1
                 player_attacked = False
             if self.index == 14:
+                player_life -= 1
                 player_attacked = False
             if self.index == 21:
+                player_life -= 1
                 player_attacked = False
             if self.index == 28:
+                player_life -= 1
                 player_attacked = False
-            if self.index >= 29:
-                pygame.quit()
-                exit()
+                game_state = 2
+                
         self.image = self.images[self.index ].convert_alpha()
 
 
 
 screen = pygame.display.set_mode((960,576))
 moon_attacked_group = pygame.sprite.RenderPlain()
+
 moon_attack = MoonAttacked()
 moon_attacked_group.add(moon_attack)
 
+enemy_gen_group = pygame.sprite.RenderPlain()
 player_att_group = pygame.sprite.RenderPlain()
 enemy_att_group = pygame.sprite.RenderPlain()
 clock = pygame.time.Clock()
 # 4 - keep looping through
+
+
+
 while 1:
     
     
@@ -392,108 +423,187 @@ while 1:
     screen.blit(player, (0,0))
     # 7 - update the screen
     # 8 - loop through the events
-    keys = pygame.key.get_pressed() #다중키 입력 받기
-    if keys[pygame.K_UP]:
-        if keys[pygame.K_LEFT]:
-            player_att_dir = dir_top_left
-        if keys[pygame.K_RIGHT]:
-            player_att_dir = dir_top_right
-    else:
-        if keys[pygame.K_LEFT]:
-            player_att_dir = dir_left
-        if keys[pygame.K_RIGHT]:
-            player_att_dir = dir_right
+    remain_time = 0
+    if game_state == 0:
 
-    if player_life <= 0:
-        pygame.quit() 
-        exit(0)
-    
-    for event in pygame.event.get():
-        # check if the event is the X button 
-        if event.type==pygame.QUIT:
-            # if it is quit the game
-            pygame.quit() 
-            exit(0)
-        if event.type == pygame.KEYDOWN:
+        for event in pygame.event.get():
+            # check if the event is the X button
             
-            if event.key == pygame.K_a: # 적1 생성
-                enemy = enemy1(0)
-                enemy_att_group.add(enemy)
-            if event.key == pygame.K_s: # 적1 생성
-                enemy = enemy2(0)
-                enemy_att_group.add(enemy)
-            if event.key == pygame.K_d: # 적1 생성
-                enemy = enemy3(0)
-                enemy_att_group.add(enemy)
-            if event.key == pygame.K_q: # 적1 생성
-                enemy = enemy1(1)
-                enemy_att_group.add(enemy)
-            if event.key == pygame.K_w: # 적1 생성
-                enemy = enemy2(1)
-                enemy_att_group.add(enemy)
-            if event.key == pygame.K_e: # 적1 생성
-                enemy = enemy3(1)
-                enemy_att_group.add(enemy)
+            if event.type==pygame.QUIT:
+                # if it is quit the game
+                pygame.quit() 
+                exit(0)
+        keys = pygame.key.get_pressed() #다중키 입력 받기
+        if keys[pygame.K_SPACE]:
+            game_state = 1
+            start_time = time.time()
+            
+            
+            #적 생성
+            enemy_gen = EnemyGenerator(3.0, 'b')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(6.0, 'c')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(9.0, 'B')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(10.0, 'A')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(11.0, 'b')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(11.5, 'A')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(12.0, 'b')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(14.0, 'c')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(14.2, 'B')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(15.0, 'a')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(16.0, 'b')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(17.0, 'B')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(17.0, 'c')
+            enemy_gen_group.add(enemy_gen)
+            enemy_gen = EnemyGenerator(17.3, 'a')
+            enemy_gen_group.add(enemy_gen)
+
+    elif game_state == 1:
+        keys = pygame.key.get_pressed() #다중키 입력 받기
+        if keys[pygame.K_UP]:
+            if keys[pygame.K_LEFT]:
+                player_att_dir = dir_top_left
+            if keys[pygame.K_RIGHT]:
+                player_att_dir = dir_top_right
+        else:
+            if keys[pygame.K_LEFT]:
+                player_att_dir = dir_left
+            if keys[pygame.K_RIGHT]:
+                player_att_dir = dir_right
+
+        if player_life <= 0:
+            game_state = 2
+        
+        for event in pygame.event.get():
+            # check if the event is the X button 
+            if event.type==pygame.QUIT:
+                # if it is quit the game
+                pygame.quit() 
+                exit(0)
+            if event.type == pygame.KEYDOWN:
                 
-            if event.key == pygame.K_UP:
-                tmp_up_pressed = True
-            # if tmp_up_pressed == True:
-            #     if event.key == pygame.K_LEFT:
-            #         player_att_dir = dir_top_left
-            #     elif event.key == pygame.K_RIGHT:
-            #         player_att_dir = dir_top_right
-            # else:
-            #     if event.key == pygame.K_LEFT:
-            #         player_att_dir = dir_left
-            #     elif event.key == pygame.K_RIGHT:
-            #         player_att_dir = dir_right
+                if event.key == pygame.K_a: # 적1 생성
+                    enemy_gen = EnemyGenerator(3.0, 'b')
+                    enemy_gen_group.add(enemy_gen)
+                if event.key == pygame.K_s: # 적1 생성
+                    enemy = enemy2(0)
+                    enemy_att_group.add(enemy)
+                if event.key == pygame.K_d: # 적1 생성
+                    enemy = enemy3(0)
+                    enemy_att_group.add(enemy)
+                if event.key == pygame.K_q: # 적1 생성
+                    enemy = enemy1(1)
+                    enemy_att_group.add(enemy)
+                if event.key == pygame.K_w: # 적1 생성
+                    enemy = enemy2(1)
+                    enemy_att_group.add(enemy)
+                if event.key == pygame.K_e: # 적1 생성
+                    enemy = enemy3(1)
+                    enemy_att_group.add(enemy)
                     
-            if event.key == pygame.K_SPACE and player_att_ready == True: #공격 실행
-                player_att = PlayerAttack(player_att_dir)#my_sprite를 리스트로 만들어서 여러개 저장,for문 이용 이때 mygroup도 for문으로 초기화시키기
-                player_att_group.add(player_att)
-                player_att_ready = False
+                if event.key == pygame.K_UP:
+                    tmp_up_pressed = True
+                # if tmp_up_pressed == True:
+                #     if event.key == pygame.K_LEFT:
+                #         player_att_dir = dir_top_left
+                #     elif event.key == pygame.K_RIGHT:
+                #         player_att_dir = dir_top_right
+                # else:
+                #     if event.key == pygame.K_LEFT:
+                #         player_att_dir = dir_left
+                #     elif event.key == pygame.K_RIGHT:
+                #         player_att_dir = dir_right
+                        
+                if event.key == pygame.K_SPACE and player_att_ready == True: #공격 실행
+                    player_att = PlayerAttack(player_att_dir)#my_sprite를 리스트로 만들어서 여러개 저장,for문 이용 이때 mygroup도 for문으로 초기화시키기
+                    player_att_group.add(player_att)
+                    player_att_ready = False
+                    player_att_cool_tmp = 0
+                    
+                    player_att_on_dir = player_att_dir
+                    
+            if event.type == pygame.KEYUP: #UP키 뗄경우
+                if event.key == pygame.K_UP:
+                    tmp_up_pressed = False
+                    player_att_dir -= 2
+        
+        small_font = pygame.font.SysFont(None, 36)
+        remain_time = int((time.time()-start_time)*10)/10
+        remain_time_image = small_font.render('Time {}'.format(remain_time), True, (255,255,255))
+        print(time.time()-start_time)
+        screen.blit(remain_time_image, (10, 10))
+        
+        if player_att_ready == False: # 준비중, 쿨타임 돌리
+            player_att_cool_tmp += 1
+            if player_att_cool_tmp >= 3:
+                player_att_on_dir = -1
+            if player_att_cool_tmp >= player_att_cool:
                 player_att_cool_tmp = 0
+                player_att_ready = True
+        else:
+            player_att_cool_tmp = 0 #when the paring success, reset tmp
+
+        render_offset = [0,0] #화면 흔들기
+        if screen_shake > 0 : 
+            screen_shake -=1 
+            render_offset[0] = randint(0,5) - 2.5
+            render_offset[1] = randint(0,5) - 2.5
+        screen.blit(screen,render_offset)
+    elif game_state == 2:
+        for event in pygame.event.get():
+                # check if the event is the X button 
+                if event.type==pygame.QUIT:
+                    # if it is quit the game
+                    pygame.quit() 
+                    exit(0)
+    elif game_state == 3:
+
+        for event in pygame.event.get():
+                # check if the event is the X button 
+                if event.type==pygame.QUIT:
+                    # if it is quit the game
+                    pygame.quit() 
+                    exit(0)
                 
-                player_att_on_dir = player_att_dir
-                
-        if event.type == pygame.KEYUP: #UP키 뗄경우
-            if event.key == pygame.K_UP:
-                tmp_up_pressed = False
-                player_att_dir -= 2
-    
-    
-    
-    small_font = pygame.font.SysFont(None, 36)
-    remain_time = int((time.time()-start_time)*10)/10
-    remain_time_image = small_font.render('Time {}'.format(remain_time), True, (255,255,0))
- 
-    screen.blit(remain_time_image, (10, 10))
- 
+
     moon_attacked_group.update()
     moon_attacked_group.draw(screen)
+
     player_att_group.update()
     player_att_group.draw(screen)
+
+    enemy_gen_group.update()
+    enemy_gen_group.draw(screen)
+
     enemy_att_group.update()
     enemy_att_group.draw(screen)
     
 #    pygame.time.set_timer(player_att_ready = True , 1000)
-    if player_att_ready == False: # 준비중, 쿨타임 돌리
-       player_att_cool_tmp += 1
-       if player_att_cool_tmp >= 3:
-           player_att_on_dir = -1
-       if player_att_cool_tmp >= player_att_cool:
-            player_att_cool_tmp = 0
-            player_att_ready = True
-    else:
-        player_att_cool_tmp = 0 #when the paring success, reset tmp
+    
+    if game_state == 0:
+            #게임 시작 문장
+        small_font = pygame.font.SysFont(None, 36)
+        text = small_font.render('Press SPACE button to start', True, (255,255,255))
+        screen.blit(text, (width/4, height/2))
+    elif game_state == 2:
+        text = small_font.render('You are dead!', True, (255,255,255))
+        screen.blit(text, (width*2/5, height/2))
+    elif game_state == 3:
+        small_font = pygame.font.SysFont(None, 36)
+        text = small_font.render('You Won!', True, (255,255,255))
+        screen.blit(text, (width*2/5, height/2))
 
-    render_offset = [0,0] #화면 흔들기
-    if screen_shake > 0 : 
-        screen_shake -=1 
-        render_offset[0] = randint(0,5) - 2.5
-        render_offset[1] = randint(0,5) - 2.5
-
-
-    screen.blit(screen,render_offset)
+    
     pygame.display.flip()
     clock.tick(30)

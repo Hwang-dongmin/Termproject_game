@@ -1,5 +1,8 @@
 
 import pygame
+
+enemy_gen_image = pygame.image.load('resources/images/emty.png')
+
 player_att_images = [[],[]]
 player_att_images[0].append(pygame.image.load('resources/images/player/player_att_left_01.png'))
 player_att_images[0].append(pygame.image.load('resources/images/player/player_att_left_01.png'))
