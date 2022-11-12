@@ -494,24 +494,24 @@ while 1:
                 exit(0)
             if event.type == pygame.KEYDOWN:
                 
-                if event.key == pygame.K_a: # 적1 생성
-                    enemy_gen = EnemyGenerator(3.0, 'b')
-                    enemy_gen_group.add(enemy_gen)
-                if event.key == pygame.K_s: # 적1 생성
-                    enemy = enemy2(0)
-                    enemy_att_group.add(enemy)
-                if event.key == pygame.K_d: # 적1 생성
-                    enemy = enemy3(0)
-                    enemy_att_group.add(enemy)
-                if event.key == pygame.K_q: # 적1 생성
-                    enemy = enemy1(1)
-                    enemy_att_group.add(enemy)
-                if event.key == pygame.K_w: # 적1 생성
-                    enemy = enemy2(1)
-                    enemy_att_group.add(enemy)
-                if event.key == pygame.K_e: # 적1 생성
-                    enemy = enemy3(1)
-                    enemy_att_group.add(enemy)
+                # if event.key == pygame.K_a: # 적1 생성
+                #     enemy_gen = EnemyGenerator(3.0, 'b')
+                #     enemy_gen_group.add(enemy_gen)
+                # if event.key == pygame.K_s: # 적1 생성
+                #     enemy = enemy2(0)
+                #     enemy_att_group.add(enemy)
+                # if event.key == pygame.K_d: # 적1 생성
+                #     enemy = enemy3(0)
+                #     enemy_att_group.add(enemy)
+                # if event.key == pygame.K_q: # 적1 생성
+                #     enemy = enemy1(1)
+                #     enemy_att_group.add(enemy)
+                # if event.key == pygame.K_w: # 적1 생성
+                #     enemy = enemy2(1)
+                #     enemy_att_group.add(enemy)
+                # if event.key == pygame.K_e: # 적1 생성
+                #     enemy = enemy3(1)
+                #     enemy_att_group.add(enemy)
                     
                 if event.key == pygame.K_UP:
                     tmp_up_pressed = True
