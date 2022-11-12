@@ -440,36 +440,37 @@ while 1:
             
             
             #적 생성
-            enemy_gen = EnemyGenerator(3.0, 'b')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(6.0, 'c')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(9.0, 'B')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(10.0, 'A')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(11.0, 'b')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(11.5, 'A')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(12.0, 'b')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(14.0, 'c')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(14.2, 'B')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(15.0, 'a')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(16.0, 'b')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(17.0, 'B')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(17.0, 'c')
-            enemy_gen_group.add(enemy_gen)
-            enemy_gen = EnemyGenerator(17.3, 'a')
-            enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(3.0, 'b')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(6.0, 'c')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(9.0, 'B')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(10.0, 'A')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(11.0, 'b')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(11.5, 'A')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(12.0, 'b')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(14.0, 'c')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(14.2, 'B')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(15.0, 'a')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(16.0, 'b')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(17.0, 'c')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(17.0, 'B')
+            # enemy_gen_group.add(enemy_gen)
+            # enemy_gen = EnemyGenerator(17.6, 'a')
+            # enemy_gen_group.add(enemy_gen)
 
     elif game_state == 1:
+        
         keys = pygame.key.get_pressed() #다중키 입력 받기
         if keys[pygame.K_UP]:
             if keys[pygame.K_LEFT]:
@@ -543,6 +544,8 @@ while 1:
         remain_time_image = small_font.render('Time {}'.format(remain_time), True, (255,255,255))
         print(time.time()-start_time)
         screen.blit(remain_time_image, (10, 10))
+        if remain_time >= 20.0:
+            game_state = 3
         
         if player_att_ready == False: # 준비중, 쿨타임 돌리
             player_att_cool_tmp += 1
