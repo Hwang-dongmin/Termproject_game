@@ -368,7 +368,6 @@ class PlayerAttack(pygame.sprite.Sprite):
 class MoonAttacked(pygame.sprite.Sprite):
     def __init__(self):
         super(MoonAttacked, self).__init__()
-        print(len(moon_attacked))
         self.images = moon_attacked 
         self.index = 0 
         self.image = self.images[0].convert_alpha()
