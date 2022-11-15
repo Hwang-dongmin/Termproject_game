@@ -3,6 +3,7 @@ import time
 from random import randint
 from pygame.locals import *
 from image_load import *
+import ctypes
 
 #죽었을때 애니메이션 추가, 코드 수정 -> 적 클래스 여러개 만들기/ 렉 해결안됨 -> 렉해결( 이미지 미리 불러오기 )
 #플레이어 생명력은 3칸, 공격 받을 때마다 달 부서지기
@@ -57,8 +58,11 @@ class EnemyGenerator(pygame.sprite.Sprite):
 
     def update(self):
         global remain_time
+        global game_state
         self.start_time = 0
         #time 기능으로 적절한 패턴 타이밍 구현하기
+        if game_state == 2:
+            enemy_gen_group.remove(self)
         if remain_time == self.time and self.attack_start == False:
             self.start_time = 0
             self.attack_start = True
@@ -427,7 +431,11 @@ while 1:
 
         for event in pygame.event.get():
             # check if the event is the X button
-            
+            if event.type == KEYDOWN:
+                if event.key == ord('f'):  # f 키를 눌렀을 때
+                    user32 = ctypes.windll.user32
+                    screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)  # 해상도 구하기
+                    surface = pygame.display.set_mode(screensize, FULLSCREEN)  # 전체화면으로 전환
             if event.type==pygame.QUIT:
                 # if it is quit the game
                 pygame.quit() 
@@ -507,7 +515,7 @@ while 1:
                 #     enemy_att_group.add(enemy)
                 # if event.key == pygame.K_w: # 적1 생성
                 #     enemy = enemy2(1)
-                #     enemy_att_group.add(enemy)
+                # #     enemy_att_group.add(enemy)
                 # if event.key == pygame.K_e: # 적1 생성
                 #     enemy = enemy3(1)
                 #     enemy_att_group.add(enemy)
@@ -563,14 +571,48 @@ while 1:
             render_offset[1] = randint(0,5) - 2.5
         screen.blit(screen,render_offset)
     elif game_state == 2:
+        keys = pygame.key.get_pressed() #다중키 입력 받기
+        if keys[pygame.K_r]:
+            #재시작을 위한 초기화
+            # pygame.init()
+            player_attacked = False
+            player_att_dir = dir_left
+            player_att_cool = 20 # 30fps , 1 sec
+            player_att_cool_tmp = 0
+            player_att_ready = True
+            player_att_on_dir = -1 # -1 : non , 0:l,1:r,2:l_t,3:r_t
+            tmp_up_pressed = False # UP키가 눌렸는가?
+            player_life = 4
+            game_state = 0
+            start_time = time.time()
+
+            moon_attack.index = 0
+
         for event in pygame.event.get():
                 # check if the event is the X button 
+
                 if event.type==pygame.QUIT:
                     # if it is quit the game
+                    
                     pygame.quit() 
                     exit(0)
     elif game_state == 3:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_r]:
+            #재시작을 위한 초기화
+            # pygame.init()
+            player_attacked = False
+            player_att_dir = dir_left
+            player_att_cool = 20 # 30fps , 1 sec
+            player_att_cool_tmp = 0
+            player_att_ready = True
+            player_att_on_dir = -1 # -1 : non , 0:l,1:r,2:l_t,3:r_t
+            tmp_up_pressed = False # UP키가 눌렸는가?
+            player_life = 4
+            game_state = 0
+            start_time = time.time()
 
+            moon_attack.index = 0
         for event in pygame.event.get():
                 # check if the event is the X button 
                 if event.type==pygame.QUIT:
@@ -599,8 +641,8 @@ while 1:
         text = small_font.render('Press SPACE button to start', True, (255,255,255))
         screen.blit(text, (width/4, height/2))
     elif game_state == 2:
-        text = small_font.render('You are dead!', True, (255,255,255))
-        screen.blit(text, (width*2/5, height/2))
+        text = small_font.render('You are dead! press R to restart', True, (255,255,255))
+        screen.blit(text, (width/4, height/2))
     elif game_state == 3:
         small_font = pygame.font.SysFont(None, 36)
         text = small_font.render('You Won!', True, (255,255,255))
