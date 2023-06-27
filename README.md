@@ -34,9 +34,9 @@ StyleGAN2의 전체적인 모델 구조 및 기존 StyleGAN과의 차별점 등�
 
 ---
 ## 참고자료
-StyleGAN2-ADA
+StyleGAN2-ADA<br>
 https://github.com/NVlabs/stylegan2-ada-pytorch
 
-Network-Blending-ADA-PT
+Network-Blending-ADA-PT<br>
 https://colab.research.google.com/github/dvschultz/stylegan2-ada-pytorch/blob/main/Network_Blending_ADA_PT.ipynb
 
