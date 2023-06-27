@@ -1,9 +1,9 @@
 # Khuda_Project_StyleGAN2
-##프로젝트 설명
+## 프로젝트 설명
 StyleGAN2를 이용한 게임 속 축구 선수 얼굴 이미지 생성 프로젝트입니다. <br>
 
 ---
-##구성원
+## 구성원
 한상진, 황동민
 
 ---
@@ -33,7 +33,7 @@ StyleGAN2의 전체적인 모델 구조 및 기존 StyleGAN과의 차별점 등�
 
 
 ---
-##참고자료
+## 참고자료
 StyleGAN2-ADA
 https://github.com/NVlabs/stylegan2-ada-pytorch
 
